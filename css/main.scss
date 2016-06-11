@@ -1832,3 +1832,76 @@ $baseurl: '{{ site.baseurl }}/images';
 			}
 		}
 	}
+
+	#post-style {
+	    color: #aaa;
+			margin-right: 3em;
+			margin-left: 3em;
+			text-align: center;
+
+	}
+	#post-style article {
+	    padding: 1em 0;
+	    position: relative;
+	}
+	#post-style article:last-child {
+	    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+	}
+	#post-style article footer {
+	    margin: 0;
+	    padding: 0;
+	}
+
+	#post-style h2 {
+		color: #222;
+		margin-bottom: 0.3em;
+		padding-left: 2em;
+		padding-right: 5em;
+		width: 170px;
+		height: inherit;
+		height: auto;
+		float:left;
+	}
+	#post-style p {
+		text-align:left;
+    padding:0;
+    margin:0 0 0 200px;
+	}
+	#post-style h1 {
+	    font-size: 1.5em;
+	}
+	#post-style h1 a {
+	    color: inherit;
+	    display: inline-block;
+	    font-weight: normal;
+	    text-decoration: none;
+	}
+	#post-style h1 a:hover {
+	    text-decoration: underline;
+	}
+	#post-style h1 a:hover {
+	    color: #0181eb;
+	}
+
+	#post-style .entry-content {
+	    display: none;
+	}
+	#post-style p {
+	    margin-bottom: 1em;
+	}
+	#post-style a, #post-style .entry-content a {
+	    color: inherit;
+	}
+	#post-style a:hover, #post-style .entry-content a:hover {
+	    color: #0181eb;
+	}
+	#post-style a:hover {
+	    color: #0181eb;
+	}
+
+	hr {
+	  border:0;
+	  border-top: 1px solid #E19832;
+	  height: 0;
+	  background: #E19832;
+	}

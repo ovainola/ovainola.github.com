@@ -55,5 +55,6 @@ social:
 
 # Build settings
 markdown: kramdown
+array: []
 #sass:
 #  style: compressed
