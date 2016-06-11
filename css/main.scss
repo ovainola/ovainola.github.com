@@ -1905,3 +1905,7 @@ $baseurl: '{{ site.baseurl }}/images';
 	  height: 0;
 	  background: #E19832;
 	}
+
+	p.about {
+		text-align: justify;
+	}
