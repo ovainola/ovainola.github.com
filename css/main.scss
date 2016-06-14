@@ -1268,6 +1268,58 @@ $baseurl: '{{ site.baseurl }}/images';
 		}
 	}
 
+
+	.wrapper {
+		@include padding(6em, 0);
+
+		> .inner_post {
+			width: 60em;
+			margin: 0 auto;
+			font-size: 0.9em;
+			text-align: justify;
+
+			@include breakpoint(large) {
+				width: 90%;
+			}
+
+			@include breakpoint(medium) {
+				width: 100%;
+			}
+		}
+
+		&.alt {
+			padding: 0;
+		}
+
+		&.style1 {
+			@include wrapper(accent1);
+		}
+
+		&.style2 {
+			background-color: _palette(bg);
+		}
+
+		&.style3 {
+			@include wrapper(accent5);
+		}
+
+		&.style4 {
+			background-color: transparent;
+		}
+
+		&.style5 {
+			@include wrapper(accent7);
+		}
+
+		@include breakpoint(medium) {
+			@include padding(4em, 3em);
+		}
+
+		@include breakpoint(small) {
+			@include padding(3em, 2em);
+		}
+	}
+
 /* Page Wrapper + Menu */
 
 	#page-wrapper {
