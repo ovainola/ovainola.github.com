@@ -39,6 +39,7 @@ As you can see in the picture, the goal is to map element from local coordiantes
 <div style="text-align: center;">
 <img src="{{ site.url }} /images/calculating_element_surface_area/changing_coordinate_system.png" width="600">
 </div>
+
 ### Shape functions
 
 Shape functions or basis fuctions are used to obtain an approach solution to the exact solution (ref. [Kratos](http://kratos-wiki.cimne.upc.edu/index.php/Shape_Functions)). Shape functions can represent both the element geometry and the problem unknowns, hence the name isoparametric element ("iso" means equal). In the Finite Element Method a lineal combination is used to interpolate the solution:
