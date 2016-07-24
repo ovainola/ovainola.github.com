@@ -116,7 +116,7 @@ nice from the scratch is out of my league.
 
 Luckily, I found [HTML5 up](https://html5up.net/). Very modern looking templates
 with [Creative Commons Attribution](https://html5up.net/license) license. There were
-multiple candidates, but I selected the Spektral theme. After downloading,
+multiple candidates, but I selected the Spectral theme. After downloading,
 it was more or less copy/paste work. I guess I should have been a bit more original
 and at least change the colorsheme... let's add that to TODO list...
 
