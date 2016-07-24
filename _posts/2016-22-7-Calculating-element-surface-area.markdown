@@ -342,17 +342,16 @@ function calculate_surface_3D(x, y, z, dN, points, weigths)
             jw = weights[j]
 
             # Calculating derivatives
-            DN = dN([ip, jp, 0.])
+            DN = dN([ip, jp])
 
             # picking derivatives
             dNdη = DN[:, 1]
             dNdξ = DN[:, 2]
-            dNdμ = DN[:, 3]
 
             # Coordinates
-            dx = [dot(x, dNdη), dot(x, dNdξ), dot(x, dNdμ)]
-            dy = [dot(y, dNdη), dot(y, dNdξ), dot(y, dNdμ)]
-            dz = [dot(z, dNdη), dot(z, dNdξ), dot(z, dNdμ)]
+            dx = [dot(x, dNdη), dot(x, dNdξ), 0]
+            dy = [dot(y, dNdη), dot(y, dNdξ), 0]
+            dz = [dot(z, dNdη), dot(z, dNdξ), 0]
 
             # Calculate length of the normals
             dAdx = norm(cross(dy, dz))
