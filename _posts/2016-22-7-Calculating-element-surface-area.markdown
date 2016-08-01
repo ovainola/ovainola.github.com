@@ -15,11 +15,11 @@ A while ago I had a problem of calculating element surface areas from finite ele
 <img src="{{ site.url }} /images/calculating_element_surface_area/ball_and_ele_2.png">
 </div>
 
-As you can see there is a ball, which is constructed from a finite number of elements (let's make an assumption, that these elements are brick elements, just like the one that the arrow is pointing at). Each element is constructed from 20 nodes (the yellow points). The objective was to calculate surface area of the red face from the element. The information we have are the coordinates of the nodes and the element type. My first approach was to google for solutions. I found algorithms for calculating surface areas in a plane using curves, analytical equations for triangles & boxes etc. Only problem with these algorithms were that they defined in 2D but the problem we have here is to calculate surface area in 3D space. Since I didn't find any easy solutions (I don't say there isn't one, I just didn't have the patience to search deeper), so here's an solution I tinkered using [Julia](http://julialang.org/) programming language.
+As you can see there's a ball, which is constructed from a finite number of elements (let's make an assumption, that these elements are brick elements, just like the one that the arrow is pointing at). Each element is constructed from 20 nodes (the yellow points). The objective is to calculate surface area of the red face from the element. The information we have are the coordinates of the nodes and the element type. My first approach was to google for a solutions. I found algorithms for calculating surface areas in a plane using curves, analytical equations for triangles & boxes etc. Only problem with these algorithms were that they defined in 2D but the problem we have here is to calculate surface area in 3D space. Since I didn't find any easy solutions (I don't say there isn't one, I just didn't have the patience to search deeper), so here's an solution I tinkered using [Julia](http://julialang.org/) programming language.
 
 # Theory
 
-Since the problem was related to finite element method, I think we'll make a short introduction:
+Since the problem was related to finite element method, I think we'll make a short introduction to method:
 
 
 > The finite element method (FEM) is a numerical technique for finding approximate solutions to boundary value problems for partial differential equations. It is also referred to as finite element analysis (FEA). FEM subdivides a large problem into smaller, simpler, parts, called finite elements. The simple equations that model these finite elements are then assembled into a larger system of equations that models the entire problem. FEM then uses variational methods from the calculus of variations to approximate a solution by minimizing an associated error function. (ref [Wikipedia](https://en.wikipedia.org/wiki/Finite_element_method))
@@ -30,7 +30,7 @@ In finite element method field variables are integrated over volume or area, dep
 
 * Integrals that appear in the expressions of the element stiffness matrix and consistent nodal force vector can no longer be evaluated in simple closed form.
 
-Luckily these obsticles were overcome through the concepts of isoparametric mapping and numerical quadrature. Combining these ideas transformed the field of finite element methods during the 1960's. Without any further introduction, let's dig in. (ref. [University of Colorado](http://www.colorado.edu/engineering/CAS/courses.d/IFEM.d/IFEM.Ch16.d/IFEM.Ch16.pdf))
+Luckily these obsticles were overcome through the concepts of isoparametric mapping and numerical quadrature. Combining these ideas transformed the field of finite element methods during the 1960's. Let's dig in. (ref. [University of Colorado](http://www.colorado.edu/engineering/CAS/courses.d/IFEM.d/IFEM.Ch16.d/IFEM.Ch16.pdf))
 
 
 ## Isoparametric mapping
@@ -50,7 +50,7 @@ x = \sum_{i=1} N_i x_i
 \end{equation}
 </p>
 
-in which $$N_i$$ are the shape functions (functions of $$\eta$$ and $$\xi$$) and $$x_i$$ are coordinates of a node. The number of shape functions used for given element corresponds to the number of nodes in element. For example, linear 1D bar element can be defined as:
+in which $$N_i$$ are the shape functions (functions of $$\eta$$ and $$\xi$$) and $$x_i$$ are coordinates of a node. The number of shape functions used for given element corresponds to the number of nodes in an element. For example, linear 1D bar element can be defined as:
 
 <div style="text-align: center;">
 \begin{equation}
@@ -102,7 +102,7 @@ println("Coordinate in second node:           $(dot(N_lin_bar(1), x_example))")
     Coordinate in second node:           5.0
 
 
-Ok, cool thing. There are many documentations/sites, where to acquire shape functions for different shapes, but I'll be using functions from [code aster](http://www.code-aster.org/V2/doc/v11/en/man_r/r3/r3.01.01.pdf) documentation. Now let's try the same with a square with four (4) nodes:
+Ok, cool thing. There are many documentations/sites, where to acquire shape functions for different shapes but I'll be using functions from [code aster](http://www.code-aster.org/V2/doc/v11/en/man_r/r3/r3.01.01.pdf) documentation. Now let's try the same with a square with four (4) nodes:
 
 
 ```julia
@@ -122,7 +122,7 @@ f_n_2 = N_quad_4(0 ,0)
 f_n_3 = N_quad_4(1, -1)
 f_n_4 = N_quad_4(1, 1)
 
-# Plotting twice just to get a closed
+# Plotting twice just to get a closed loop
 plot(x_coords, y_coords)
 plot([x_coords[end], x_coords[1]], [y_coords[end], y_coords[1]], "b")
 scatter(x_coords, y_coords);
@@ -158,7 +158,7 @@ Using shape functions and integration rules we can transform area integration:
 \int_{\Omega_A} f(x,y)\hspace{2mm} dA = \int_{-1}^1\int_{-1}^1 f(\eta, \xi) \det J\hspace{2mm}d\eta d\xi
 \end{equation}
 
-in which $$J$$ is jacobian (as seen [here](http://www.lncc.br/~alm/public/integexp.pdf). And then using gaussian quadrature we can finalize following:
+in which $$J$$ is jacobian (as seen [here](http://www.colorado.edu/engineering/CAS/courses.d/IFEM.d/IFEM.Ch17.d/IFEM.Ch17.pdf) in eq. 17.8). Now equation can be finalize using gaussian quadrature:
 
 \begin{equation}
 \int_{-1}^1\int_{-1}^1 f(\eta, \xi) \det J\hspace{2mm}d\eta d\xi= \sum_{n=1}^{n_p} f(\eta_p, \xi_p) \det J(\eta_p, \xi_p) W_p
@@ -286,7 +286,7 @@ Area = \begin{vmatrix} \det \begin{pmatrix} \begin{bmatrix}
 \end{equation}
 
 </p>
-Previously in 2D formulation we can see how we used the determinant of jacobian was used to calculate the surface area. In the 3D formulation we'll use all $$i, j $$ and $$k$$ components. Coordinates are projected on xy-, yz- and xz-planes and individual surface areas calculated on these planes. The total surface area is calculated as a norm of these smaller surface areas
+Previously in 2D formulation we can see how the determinant of the jacobian was used to calculate the surface area. In the 3D formulation we'll use all $$i, j $$ and $$k$$ components. Coordinates are projected on xy-, yz- and xz-planes and individual surface areas calculated on these planes. The total surface area is calculated as a norm of these smaller surface areas
 
 <div style="text-align: center;">
 <img src="{{ site.url }} /images/calculating_element_surface_area/3d_surface_area.png" width="500">
@@ -354,7 +354,7 @@ function calculate_surface_3D(x, y, z, dN, points, weigths)
             dy = [dot(y, dNdη), dot(y, dNdξ), 0]
             dz = [dot(z, dNdη), dot(z, dNdξ), 0]
 
-            # Calculate length of the normals
+            # Calculate lengths of the normals
             dAdx = norm(cross(dy, dz))
             dAdy = norm(cross(dz, dx))
             dAdz = norm(cross(dx, dy))
@@ -366,12 +366,13 @@ function calculate_surface_3D(x, y, z, dN, points, weigths)
     area
 end
 
-# Coordiantes: 1x1x1 cube
+# Coordiantes: 1x1 plate
 x = Float64[0, 1, 1, 0]
 y = Float64[0, 0, 1, 1]
 z = Float64[0, 0, 0, 0]
 
-# Let's just make it more interesting by rotating the cube 45 deg around all axis
+# Just to make sure, that function calculates the right answer,
+# let's rotate the plate 45 deg around all axis
 x_, y_, z_ = rotate_cube(x, y, z, 45.*pi/180.)
 
 # Integration points and weights for gaussian quadrature
@@ -389,3 +390,10 @@ And that's about it, hopefully I didn't leave any bugs or mistakes. Picking diff
 shape functions enables calculating various shapes. Now, in my original problem I had 20 nodes
 in one hexagon, which meant that I just had to pick the right nodes in right order, pick
 shape functions for Quad8 and use following algorithm to calculate the surface area.
+
+### Note
+
+Since we're using shape functions to calculate the surface area, there's a catch:
+Shape functions interpolate the coordinates inside element area, and if element
+happens to be distorted (not exactly the same shape as what shape functions define)
+there's a bit error in the solution: more distortion, more the error.
