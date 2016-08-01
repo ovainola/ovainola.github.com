@@ -56,5 +56,6 @@ social:
 # Build settings
 markdown: kramdown
 array: []
+google_analytics: UA-78949639-1
 #sass:
 #  style: compressed
