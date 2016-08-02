@@ -4,6 +4,7 @@ title:  "Calculating element surface area"
 date:   2016-7-22 21:00:00 +0300
 categories: jekyll update
 comments: true
+identifier: 10002
 ---
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
