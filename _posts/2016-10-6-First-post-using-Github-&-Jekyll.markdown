@@ -4,6 +4,7 @@ title:  "First post using Github & Jekyll!"
 date:   2016-6-10 21:02:14 +0300
 categories: jekyll update
 comments: true
+identifier: 154789
 ---
 <p><font size="6">S</font>o it begins! Sites are constructed (read edited),
 fonts selected and layouts finished. Finally making some progress! The motivation
