@@ -29,7 +29,7 @@ The site contains pretty clear instructions how to start building your own blog,
   I had to get was Ruby. And as a note, I have Linux Mint 17 as my operating system.
   In order to minimize my work, I first checked if Ruby was already preinstalled in my system.
 
-```
+```bash
 >> ruby
 The program 'ruby' can be found in the following packages:
  * ruby
@@ -44,7 +44,7 @@ be to build either [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.
 After careful decision making process, I went for the rbenv, purely because I
 visually preferred the GitHub pages more. Also rbenv had pretty good installation instructions. Off to building rbenv:
 
-```
+```bash
 >> git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 >> cd ~/.rbenv && src/configure && make -C src
 >> echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
@@ -55,7 +55,7 @@ I'm still missing Ruby so I also installed [ruby-build](https://github.com/rbenv
 package. The package is used to compile different versions of Ruby.
 Since I needed version > 2.0.0, I decided to take the latest: 2.3.1:
 
-```
+```bash
 >> git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 >> rbenv install -l |grep 2.3
   1.9.1-p243
@@ -72,7 +72,7 @@ Since I needed version > 2.0.0, I decided to take the latest: 2.3.1:
 
 Next in line: JeKyll. This was quite smooth sailing since the hard part was over.
 
-```
+```bash
 >> gem install jekyll
 ```
 
@@ -84,7 +84,7 @@ After that, I wanted my life to be as easy as possible, so I used Jekyll to crea
 a test website for me. I also wanted to test it locally immediately and here "jekyll serve" command
 proved to be pretty handy.
 
-```
+```bash
 >> cd ~ && mkdir blog && cd blog
 >> jekyll new ovainola.github.io
 >> cd ovainola.github.io
@@ -95,7 +95,7 @@ Now I had a first template site working. Next stop was to create initial commit.
 Since I already had created a repository for my site, I just initialized
 git, added new remote and created the first commit:
 
-```
+```bash
 >> git init
 >> git remote add origin git@github.com:ovainola/ovainola.github.io
 >> git add .

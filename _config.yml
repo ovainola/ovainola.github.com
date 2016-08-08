@@ -55,6 +55,7 @@ social:
 
 # Build settings
 markdown: kramdown
+highlighter: rouge
 array: []
 google_analytics: UA-78949639-1
 #sass:
