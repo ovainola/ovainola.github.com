@@ -21,19 +21,19 @@ Introduction to linear elasticity from [Wikipedia](https://en.wikipedia.org/wiki
 
 `Linear elasticity is the mathematical study of how solid objects deform and become internally stressed due to prescribed loading conditions. Linear elasticity models materials as continua. Linear elasticity is a simplification of the more general nonlinear theory of elasticity and is a branch of continuum mechanics. The fundamental "linearizing" assumptions of linear elasticity are: infinitesimal strains or "small" deformations (or strains) and linear relationships between the components of stress and strain. In addition linear elasticity is valid only for stress states that do not produce yielding. These assumptions are reasonable for many engineering materials and engineering design scenarios. Linear elasticity is therefore used extensively in structural analysis and engineering design, often with the aid of finite element analysis.`
 
-Applying force to a continuum leads to deformation of the medium. This results in changes in shape and size. Hooke's Law is equations, used to descibe this relation:
+Applying force to a continuum leads to deformation of the medium. This leads into changes in shape and size. Hooke's Law is equations, which is used to describe this relation:
 
 \begin{equation}
 F = -kX
 \end{equation}
 
-in which F is force, k is the slope and X is the elongation. The analogous of Hooke's spring law for continuous media is then
+in which F is force, k is the slope and X is the elongation. The analogous equation of Hooke's spring law for continuous media is then:
 
 \begin{equation}
 \sigma = − c \epsilon
 \end{equation}
 
-in which $$\sigma$$ is second order stress tensor, c is a fourth-order stiffness tensor end $$\epsilon$$ is a strain second order strain tensor. In a Cartesian coordinate system, the stress and strain tensors can be represented as:
+in which $$\sigma$$ is second order stress tensor, c is a fourth order stiffness tensor end $$\epsilon$$ is a strain second order strain tensor. In a Cartesian coordinate system, the stress and strain tensors can be represented as:
 
 <div align="center">
 
@@ -54,7 +54,7 @@ in which $$\sigma$$ is second order stress tensor, c is a fourth-order stiffness
 \end{equation}
 </div>
 
-stiffness tensor $$c$$ can be represented as a 3x3x3x3 matrix, which has a total of 81 individual elements. In this post, we'll be only looking at isotropic media (which have the same physical properties in any direction). When isotropic media is used, $$c$$ can be constructed from two numbers: $$K$$ (the bulk modulus ) and $$G$$ (the shear modulus). [Wikipedia](https://en.wikipedia.org/wiki/Linear_elasticity)
+Stiffness tensor $$c$$ can be represented as a 3x3x3x3 matrix, which has a total of 81 individual elements. In this post, we'll be only looking at isotropic media. When isotropic media is used, $$c$$ can be constructed just from two numbers: $$K$$ (the bulk modulus ) and $$G$$ (the shear modulus). [Wikipedia](https://en.wikipedia.org/wiki/Linear_elasticity)
 
 ## 1D example using Hooke's Law
 
@@ -64,7 +64,7 @@ Before dive into tensors and matrices, we'll calculate a small 1D example with H
 \sigma = E\epsilon
 \end{equation}
 
-in which E is the Young's modulus. Strain can be calculated using using engineering strain( https://en.wikipedia.org/wiki/Deformation_(mechanics) ):
+in which E is the Young's modulus. Strain can be calculated using using [engineering strain]( https://en.wikipedia.org/wiki/Deformation_(mechanics) ):
 \begin{equation}
 \epsilon = \frac{\Delta L}{L}
 \end{equation}
@@ -98,17 +98,17 @@ ylabel!("Stress [MPa]")
 
 
 
-This is the plot, which we want to archive in each example. In the following examples we'll be using the same $$L$$ and $$\Delta L$$ also. But, looking good. Now we can just into the real deal.
+This is the plot, which we want to archive in each example. In the following examples we'll be using the same $$L$$ and $$\Delta L$$. But, looking good. Let's move one.
 
 ## Index notation
 
-Index notation (or in relativity theory, Einstein notation) is a hand way to deal with arrays, vector and matrices. Using the isotropic material (media), stress can be defined as:
+Index notation (or in relativity theory, Einstein notation) is a handy way to deal with arrays, vectors and matrices. Using the isotropic material (media), stress can be defined as:
 
 \begin{equation}
 \sigma_{ij} = \lambda \epsilon_{kk}\delta_{ij} + 2\mu \epsilon_{ij}
 \end{equation}
 
-in which $$\delta$$ is the [Kronecker's delta](https://en.wikipedia.org/wiki/Kronecker_delta) and both $$\lambda$$ and $$\mu$$ are the [Lamé's constant](# https://en.wikipedia.org/wiki/Lam%C3%A9_parameters), which can be calculated with:
+in which $$\delta$$ is the [Kronecker's delta](https://en.wikipedia.org/wiki/Kronecker_delta) and both $$\lambda$$ and $$\mu$$ are the [Lamé's constants](# https://en.wikipedia.org/wiki/Lam%C3%A9_parameters), which can be calculated with:
 \begin{equation}
 \lambda = K - \frac{2}{3}G,\hspace{1cm}\mu = G
 \end{equation}
@@ -182,7 +182,7 @@ Now that we're comfortable using indeces, we'll proceed to tensor notation. Here
 `Tensors are geometric objects that describe linear relations between geometric vectors, scalars, and other tensors. Elementary examples of such relations include the dot product, the cross product, and linear maps. Euclidean vectors, often used in physics and engineering applications, and scalars themselves are also tensors. A more sophisticated example is the Cauchy stress tensor T, which takes a direction v as input and produces the stress T(v) on the surface normal to this vector for output, thus expressing a relationship between these two vectors.
 `
 
-Sound intimidating, but tensor are marely a generalization of scalars and vectors. As said in the quotation, scalars are rank 0 tensors and vectors are rank 1 tensors. One of the nice properties of tensors is that they are independent of any chosen frame of reference. Stress can now be defined in tensor notation:
+Sound intimidating, but tensor are marely a generalization of scalars and vectors. As said in the quotation, scalars are rank 0 tensors and vectors are rank 1 tensors. One of the nice properties of tensors is that they are independent of any chosen frame of reference. Using the tensor notation, stress can now be defined as:
 
 \begin{equation}
 \sigma = \lambda \rm{tr}(\epsilon) \bf{I} + \mu \epsilon
@@ -359,7 +359,7 @@ ylabel!("Stress [MPa]")
 ## Matrix notation
 
 There are justified reasons presenting equations with tensor notation but the
-practical implementation of equations is faster using matrix notation. In matrix notation rank of the tensors is so to speak, dropped. Due to symmetricity, $$C$$ can be presented as a 2D matrix:
+practical implementation of equations is faster using matrix notation. In matrix notation rank of the tensors is, so to speak, dropped. Due to symmetricity, $$C$$ can be presented as a 2D matrix:
 
 $$
 C = \frac{E}{(1+\nu)(1-2\nu)}\begin{bmatrix}
@@ -437,4 +437,4 @@ ylabel!("Stress [MPa]")
 
 ## The end
 
-Juggling with tensors, matrices and indeces can be troublesome but in the end, each of them have their own place. Tensors are much handier when presenting the equations and formulas, matrix formulation is easier (at least in my opinion) for implementation.
+In these four examples, we've calculated stress in 1D, using index, tensor and matrix notations and achieved the same result every time. Juggling with these notations can be troublesome sometimes but, in the end, each of them have their own place. Tensors are much handier when presenting the equations and formulas, matrix formulation is easier (at least in my opinion) for implementation.
