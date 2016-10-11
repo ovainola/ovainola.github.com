@@ -13,7 +13,7 @@ identifier: 10002
 A while ago I had a problem of calculating element surface areas from finite element model. Let's illustrate the problem:
 
 <div style="text-align: center;">
-<img src="{{ site.url }} /images/calculating_element_surface_area/ball_and_ele_2.png">
+<img src="{{ site.url }}/images/calculating_element_surface_area/ball_and_ele_2.png">
 </div>
 
 As you can see there's a ball, which is constructed from a finite number of elements (let's make an assumption, that these elements are brick elements, just like the one that the arrow is pointing at). Each element is constructed from 20 nodes (the yellow points). The objective is to calculate surface area of the red face from the element. The information we have are the coordinates of the nodes and the element type. My first approach was to google for a solutions. I found algorithms for calculating surface areas in a plane using curves, analytical equations for triangles & boxes etc. Only problem with these algorithms were that they defined in 2D but the problem we have here is to calculate surface area in 3D space. Since I didn't find any easy solutions (I don't say there isn't one, I just didn't have the patience to search deeper), so here's an solution I tinkered using [Julia](http://julialang.org/) programming language.
