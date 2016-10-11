@@ -38,7 +38,7 @@ Luckily these obsticles were overcome through the concepts of isoparametric mapp
 
 As you can see in the picture, the goal is to map element from local coordiantes system to global coordinate system. This can be achived with the use of shape functions.
 <div style="text-align: center;">
-<img src="{{ site.url }} /images/calculating_element_surface_area/changing_coordinate_system.png" width="600">
+<img src="{{ site.url }}/images/calculating_element_surface_area/changing_coordinate_system.png" width="600">
 </div>
 
 ### Shape functions
@@ -62,7 +62,7 @@ N(\xi) = \begin{bmatrix}
 
 \end{equation}
 
-<img src="{{ site.url }} /images/calculating_element_surface_area/bar_element.png" width="500">
+<img src="{{ site.url }}/images/calculating_element_surface_area/bar_element.png" width="500">
 </div>
 
 Let's plot this shape function within element's area
@@ -84,7 +84,7 @@ grid()
 ```
 
 <div style="text-align: center;">
-<img src="{{ site.url }} /images/calculating_element_surface_area/Calculating%20element%20surface%20area_7_0.png" width="700">
+<img src="{{ site.url }}/images/calculating_element_surface_area/Calculating%20element%20surface%20area_7_0.png" width="700">
 </div>
 
 As you can see $$N_1$$, which is the first element in $$N$$, corresponds to the node #1, since it gains the value of 1 in that node. $$N_2$$, which is the second element in $$N$$, corresponds to the node #2. Now that the shape functions work, let's try to interpolate x coordinate within the element.
@@ -135,7 +135,7 @@ println("Coordinates in third node:            x = $(dot(f_n_4, x_coords)),   y 
 ```
 
 <div style="text-align: center;">
-<img src="{{ site.url }} /images/calculating_element_surface_area/Calculating%20element%20surface%20area_11_0.png" width="700">
+<img src="{{ site.url }}/images/calculating_element_surface_area/Calculating%20element%20surface%20area_11_0.png" width="700">
 </div>
 
 
@@ -250,7 +250,7 @@ Using vectors to perform this task can prove to be a bit more convinient. Calcul
 
 <div style="text-align: center;">
 
-<img src="{{ site.url }} /images/calculating_element_surface_area/vector_area.png" width="300">
+<img src="{{ site.url }}/images/calculating_element_surface_area/vector_area.png" width="300">
 
 
 \begin{equation}
@@ -290,7 +290,7 @@ Area = \begin{vmatrix} \det \begin{pmatrix} \begin{bmatrix}
 Previously in 2D formulation we can see how the determinant of the jacobian was used to calculate the surface area. In the 3D formulation we'll use all $$i, j $$ and $$k$$ components. Coordinates are projected on xy-, yz- and xz-planes and individual surface areas calculated on these planes. The total surface area is calculated as a norm of these smaller surface areas
 
 <div style="text-align: center;">
-<img src="{{ site.url }} /images/calculating_element_surface_area/3d_surface_area.png" width="500">
+<img src="{{ site.url }}/images/calculating_element_surface_area/3d_surface_area.png" width="500">
 </div>
 
 
