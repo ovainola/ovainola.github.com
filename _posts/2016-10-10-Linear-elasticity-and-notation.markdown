@@ -4,7 +4,7 @@ title:  "Linear elasticity and notations"
 date:   2016-10-10 21:00:00 +0300
 categories: jekyll update
 comments: true
-identifier: 10003
+identifier: 10004
 ---
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
