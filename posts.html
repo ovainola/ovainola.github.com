@@ -29,17 +29,24 @@ title_name: Post archive
 
 {% if array_2018.size > 0 %}
 	<h3>2018</h3>
-	{% for my_page in array_2018 %}
+	{% for my_page in array_2018.last %}
 			{{ my_page.date | date: "%-B %-d"}}: <a href="{{ my_page.url | prepend: site.baseurl }}">{{ my_page.title }}</a>
 	{% endfor %}
 {% endif %}
 
 
 {% if array_2017.size > 0 %}
-	<h3>2017</h3>
+<div class="hr">
+<hr />
+</div>
+  <div id="post-style">
+	<h2>2017</h2>
 	{% for my_page in array_2017 %}
+		<p>
 			{{ my_page.date | date: "%-B %-d"}}: <a href="{{ my_page.url | prepend: site.baseurl }}">{{ my_page.title }}</a>
+        </p>
 	{% endfor %}
+</div>
 {% endif %}
 
 {% if array_2016.size > 0 %}
