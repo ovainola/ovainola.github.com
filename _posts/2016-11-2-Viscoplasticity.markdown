@@ -7,7 +7,7 @@ comments: true
 identifier: 10005
 ---
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-## TD;DR
+## TL;DR
 
 After practicing with elastic material model, we'll continue to nonlinear material modelling: viscoplasticity. In this post we'll explore Norton and Birgin viscoplastic potential equations, von Mises yield function and automatic derivation using ForwardDiff. Most of the theory can be found from [here](http://mms2.ensmp.fr/msi_paris/plasticity/transparents/Expo2.pdf) and [here](http://mms2.ensmp.fr/msi_paris/archives-transparents/JLC-Plasticity.pdf).
 

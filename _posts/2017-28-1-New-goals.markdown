@@ -9,7 +9,7 @@ titlepic: robot_reso.png
 ---
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
-## TD;DR
+## TL;DR
 
 Started to play halite, ended up studying neural networks.
 
