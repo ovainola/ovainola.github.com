@@ -1,7 +1,8 @@
 ---
 layout: landing
 ---
-{% assign array_2017 = site.array %}
+{% assign array_2017 = site.array%}
+
 
 {% for my_page in site.posts %}
 	{% assign page_date = my_page.date | date: "%Y" %}
@@ -10,15 +11,15 @@ layout: landing
 	{% endcase %}
 {% endfor %}
 
+{% assign projects = array_2017 | sort %}
+
+{% assign new_post = projects.last %}
+
 <!-- Banner -->
 	<section id="banner">
 		<div class="inner">
 			<h2>{{ site.title }}</h2>
 			<p>{{ site.description | markdownify }}</p>
-			<!-- <ul class="actions">
-				<li><a href="#" class="button special">Activate</a></li>
-			</ul> -->
-		</div>
 		<a href="#one" class="more scrolly">Learn More</a>
 	</section>
 
@@ -36,19 +37,12 @@ layout: landing
 <!-- Two -->
 	<section id="two" class="wrapper alt style2">
 		<section class="spotlight">
-            {% for my_page in array_2017 %}
-                <div class="image"><a href="{{ my_page.url | prepend: site.baseurl }}"><img src="images/{{ my_page.titlepic }}" alt="" /></a></div><div class="content">
+
+                <div class="image"><a href="{{ new_post.url | prepend: site.baseurl }}"><img src="images/{{ new_post.titlepic }}" alt="" /></a></div><div class="content">
                     <h2><a href="posts.html">Posts</a></h2>
                     <p>List of all of the posts. Here there be code.</p>
                 </div>
-            {% endfor %}
-		<!--	<div class="image"><a href="jekyll/update/2016/11/02/Viscoplasticity.html"><img src="images/viscoplasticity_main.png" alt="" /></a></div><div class="content">
-				<h2><a href="posts.html">Posts</a></h2>
-				<p>List of all of the posts. Here there be code.</p>
-			</div> -->
-        <!--    <p>
-                {{ my_page.date | date: "%-B %-d"}}: <a href="{{ my_page.url | prepend: site.baseurl }}">{{ my_page.title }}</a>
-            </p> -->
+
 		</section>
 
 		<section class="spotlight">
