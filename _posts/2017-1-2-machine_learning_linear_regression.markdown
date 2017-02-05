@@ -152,7 +152,7 @@ plot(O, cost_values)
 ![png](/images/machine_learning_linear_regression_files/machine_learning_linear_regression_9_0.png)
 
 
-In the plot above is demonstrated how cost function behaves with various $$\theta$$ values. It can be seen that the best fit is achieved, when $$\theta = 2.5$$. In the plot I've only added one point pair $$(x, y) = (2, 5)$$. But this is example is too easy! What about the sum function and vector notations inside cost function? If you have multiple points, which you would like to fit, you'll calculate cost for each $$(x,y)$$ pair and sum all the costs, which will give you the total fit of your function. If all the points reside on a straight line, your best fit has a total cost of 0 and if your points have little variance, your total cost is something above 0. Final piece in our buzzle is to create a function, which will find the minimum value for our cost function. If you've been at a math class, you've might hear that minimum value for the function can be found, where the derivative is zero (and now that we have quite easy cost function, which happens to be a convex function, the minimum value is the global minimum). For this task, there are again couple of choices (list of python minimizer can be found f.ex. [here](https://docs.scipy.org/doc/scipy/reference/optimize.html)) but we'll are so hard core, we'll implement [gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) algorithm ourselves (it's one of the most simplest algorithms for optimization problems and we'll use it also in the neural network post).
+In the plot above is demonstrated how cost function behaves with various $$\theta$$ values. It can be seen that the best fit is achieved, when $$\theta = 2.5$$. In the plot I've only added one point pair $$(x, y) = (2, 5)$$. But this is example is too easy! What about the sum function and vector notations inside cost function? If you have multiple points, which you would like to fit, you'll calculate cost for each $$(x,y)$$ pair and sum all the costs, which will give you the total fit of your function. If all the points reside on a straight line, your best fit has a total cost of 0 and if your points have little variance, your total cost is something above 0. Final piece in our puzzle is to create a function, which will find the minimum value for our cost function. If you've been at a math class, you've might hear that minimum value for the function can be found, where the derivative is zero (and now that we have quite easy cost function, which happens to be a convex function, the minimum value is the global minimum). For this task, there are again couple of choices (list of python minimizer can be found f.ex. [here](https://docs.scipy.org/doc/scipy/reference/optimize.html)) but we'll are so hard core, we'll implement [gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) algorithm ourselves (it's one of the most simplest algorithms for optimization problems and we'll use it also in the neural network post).
 
 ### Gradient descent
 
@@ -288,7 +288,7 @@ Cost function and it's gradient:
 J(\theta) = \frac{1}{2}\sum_i(\theta^T x^{(i)} - y^{(i)})^2, \hspace{1cm} \frac{\partial J(\theta)}{\partial \theta_j} = \sum_i x_j^{(i)} (\theta^T x^{(i)}-y^{(i)})^2
 \end{equation}
 
-Gradient descent for searhing to global minimum:
+Gradient descent for searhing the minimum value:
 \begin{equation}
 x_{n+1} = x_n - \gamma \nabla f(x_n)
 \end{equation}
@@ -418,7 +418,99 @@ println("Value for cost function: $(J(O_optim))")
     Value for cost function: 4996.621665905874
 
 
-Now the multipliers aren't the same as in the magic function and the cost function is far from zero, due to the variance in data. But this is the best fit we can achive with our linear model.
+Now the multipliers aren't the same as in the magic function and the cost function is far from zero, due to the variance in data. But this is the best fit we can achieve with our linear model. We've only been fitting one input variable $$x$$, so I'll add just one more example, if you'd have two inputs ($$x_1, x_2$$).
+
+
+```julia
+using PyPlot
+using Optim
+using Distributions
+
+# Cost function again
+function cost(f, y)
+    return 1/ 2. * sum((f .- y).^2)
+end
+
+# Our linear function. Now we'll add ones to x matrix to take into account
+# the constant
+f_fit(O, x) = vec(O' * x)
+
+# Number of samples
+num_of_points = 200
+
+# Magic function for generating data
+f(x) =  5 + 1.0 * x[2] + 0.5 * x[3] + rand(Normal(-1, 0.5))
+
+# Values for training data
+xs = zeros(3, num_of_points)
+xs[1, :] = 1.0                              # Constant
+xs[2, :] = rand(Normal(7,1), num_of_points) # multiplier for x_1
+xs[3, :] = rand(Normal(3,1), num_of_points) # multiplier for x_2
+
+# Empty vector for y-values
+ys = zeros(num_of_points)
+
+# Calculate y-values
+for ii=1:num_of_points
+    ys[ii] = f(xs[:, ii])
+end
+
+# Cost function initialization
+J(O) = cost(f_fit(O, xs), ys)
+
+# Calculation using BFGS
+results = Optim.optimize(
+    J,
+    zeros(3),
+    BFGS(),
+        OptimizationOptions(
+            autodiff   = true
+        )
+    )
+
+O_optim = Optim.minimizer(results)
+println("Optimum multipliers $(O_optim)")
+
+fig = figure()
+
+
+# Creating some plotting data
+# x & y grid
+n = 10
+x = linspace(0, 7, n)
+y = linspace(4, 10, n)
+xgrid = repmat(x',n,1)
+ygrid = repmat(y,1,n)
+z = zeros(n,n)
+
+# z-values
+for i in 1:n
+    for j in 1:n
+        z[i, j] = f_fit(O_optim, [1, y[i], x[j]])[1]
+    end
+end
+
+# Plotting surface
+surf(xgrid,ygrid,z, linewidth=0, shade=false, cmap=ColorMap("gray"), alpha=0.9)
+
+# Plotting points
+ax = scatter3D(xs[3, :], xs[2, :], ys)
+
+xlim([0, 7])
+ylim([4, 10])
+axis(:equal)
+```
+
+    Optimum multipliers [4.152901600257437,0.9680090333702178,0.5540136524257544]
+
+<div>
+    <table>
+        <img src="/images/machine_learning_linear_regression_files/fit_3d_1.png" alt="Mountain View" style="width:400px;height:350px;" align="left">
+        <img src="/images/machine_learning_linear_regression_files/fit_3d_2.png" alt="Mountain View" style="width:400px;height:350px;" align="left">
+        <img src="/images/machine_learning_linear_regression_files/fit_3d_3.png" alt="Mountain View" style="width:400px;height:350px;" align="left">
+        <img src="/images/machine_learning_linear_regression_files/fit_3d_4.png" alt="Mountain View" style="width:400px;height:350px;" align="left">
+    </table>
+</div>
 
 ## Conclusion
 
