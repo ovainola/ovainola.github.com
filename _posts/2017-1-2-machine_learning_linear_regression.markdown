@@ -9,13 +9,13 @@ titlepic: linear_regression_main.png
 ---
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
-## TL;DR
+## TL;DR;
 
 We'll start from the basics and first investigate how linear regression is connected with neural networks. In this post all the code is in [Julia](http://julialang.org/) programming language.
 
 ## Linear regression
 
-In this post we try to get comfortable with cost functions, computing gradients and learn how to optimize functions over a set of parameters. These are key tools for our upcoming advanced scripts. And yes, there are already tools for calculating this stuff, but if you really want to understand what's happening under the hood, you have to get your hand dirty or in this case go to the math/code level. If you're interested for more information/examples, I'd checkout [here](http://ufldl.stanford.edu/tutorial/).
+In this post we try to get comfortable with cost functions, computing gradients and learn how to optimize functions over a set of parameters. These are key tools for our upcoming advanced scripts. And yes, there are already tools for calculating this stuff, but if you really want to understand what's happening under the hood, you have to get your hand dirty or in this case go to the math/code level. Most of the material presented here, can be found from [this link](http://ufldl.stanford.edu/tutorial/).
 
 Let's first checkup the Wikipedia definition on linear regression:
 
