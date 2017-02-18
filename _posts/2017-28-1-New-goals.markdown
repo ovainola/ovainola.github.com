@@ -4,7 +4,7 @@ title:  "Change of the year and new goals"
 date:   2017-1-28 21:00:00 +0300
 categories: jekyll update
 comments: true
-identifier: 10003
+identifier: 10006
 titlepic: robot_reso.png
 ---
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>

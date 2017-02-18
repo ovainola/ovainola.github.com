@@ -4,7 +4,7 @@ title:  "Neural Networks journey: linear regression"
 date:   2017-2-4 21:00:00 +0300
 categories: jekyll update
 comments: true
-identifier: 10003
+identifier: 10007
 titlepic: linear_regression_main.png
 ---
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
@@ -274,7 +274,7 @@ Now that I've got you all confused and dazed, we can return to our regression. F
 
 ### Model
 
-#### Ok, finally we can assembly our model. Let's summarize, what we're using:
+Ok, finally we can assembly our model. Let's summarize, what we're using:
 
 Linear functions:
 
