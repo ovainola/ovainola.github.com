@@ -20,16 +20,14 @@ layout: default
         var disqus_shortname = "ovainola-github-io";
 
         var disqus_config = function () {
-            this.page.url = "{{ page.url }}";
-            console.log(this.page.url);
-
-            // Ugly fix for not removing earlier comments...
-            if (this.page.url != "/jekyll/update/2016/10/10/Linear-elasticity-and-notation.html") {
-                this.page.identifier = '{{ page.identifier }}';
-            } else {
+            if ("{{ page.url }}" === "/jekyll/update/2016/10/10/Linear-elasticity-and-notation.html") {
+                this.page.url = "{{ page.url }}";
                 this.page.identifier = '{% if page.disqus_identifier %}{{ page.disqus_identifier}}{% else %}{{ site.url }}{{ page.url }}{% endif %}';
+            } else {
+                this.page.url = "{{ site.url }}{{ page.url }}";
+                this.page.identifier = '{{ page.identifier }}';
             }
-            this.page.title = 'a unique title for each page where Disqus is present';
+            this.page.title = '{{ page.title }}';
         };
 
         (function() { // DON'T EDIT BELOW THIS LINE
