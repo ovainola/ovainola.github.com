@@ -140,7 +140,7 @@ in which $$\lambda$$ is the regularization strength. It's also common to see the
 Now in order to derivate the $$L_i$$ we need to use the [chain rule](https://en.wikipedia.org/wiki/Chain_rule):
 
 \begin{equation}
-L = \frac{1}{N} \frac{\partial L_i}{\partial s_i}\frac{\partial s_i}{\partial \theta_n} + \lambda \theta
+\frac{\partial L}{\partial \theta_n} = \frac{1}{N} \frac{\partial L_i}{\partial s_i}\frac{\partial s_i}{\partial \theta_n} + \lambda \theta
 \end{equation}
 
 Now derivating $$L_i$$ presents us two cases: one where we derivate $$s_j$$, one one where we derivate $$s_{y_i}$$
