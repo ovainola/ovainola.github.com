@@ -87,7 +87,7 @@ L_i = \sum_{j\neq y_i} \max(0, s_j - s_{y_i} + \Delta)
 
 in which $$s_i$$ is our linear function:
 \begin{equation}
-s_j = f(x_i, \theta, b)_j
+s_j = f(x_i, \theta, b)_j = (\theta x + b)_j
 \end{equation}
 
 Looks intimidating, how do we use it? $$s$$ represents just the score of the function and $$y_i$$ represents the corrent index. Let's say we have input vector, which has six (6) elements. We'll calculate the score using linear function and the output vector has (4) elements, which represent our categories. Let's say the correct category is index 1 and use it to calculate the loss:
@@ -96,10 +96,11 @@ Looks intimidating, how do we use it? $$s$$ represents just the score of the fun
 ```python
 input_vector = np.array([5.2, 1.0, 6.356, 10.1, -4.45, 8.20]).T
 theta = np.random.rand(4,6)
+beta = np.random.rand(4)
 yi = 1
 delta = 1
 
-scores = np.dot(theta, input_vector)
+scores = np.dot(theta, input_vector) + beta
 print("Score vector: {0}".format(scores))
 s_yi = scores[yi]
 Li = 0
