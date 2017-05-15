@@ -14,7 +14,7 @@ In this post we'll cover multiclass categorization problem using support vector 
 
 ## Multiclass classifier
 
-Before going into neural networks, I thought we should cover multiclass classifier first. In the previous posts we created a binary classifier, which was able to classify bees and hornets. But what if we want to classify multiple classes, f.ex: lady bugs, bees, butteryflies etc. For this task is un suitable for binary classifier. As before, let's create some data first, so we can visualize the problem.
+Before going into neural networks, I thought we should cover multiclass classifier first. In the previous posts we created a binary classifier, which was able to classify two categories (classes): bees and hornets. But what if we want to classify multiple classes, f.ex: lady bugs, bees, butterflies etc. As before, let's create some data first, so we can visualize the problem.
 
 
 ```python
@@ -73,7 +73,7 @@ plt.grid()
 ![png](/images/machine_learning_support_vector_machine/kuva_1.png)
 
 
-As you can see there are three clusters, each representing one bug. Now we only need a proper loss function for this: Support vector machine
+As you can see there are three clusters, each representing one bug. We'll use the same tools as before, but we only need a proper loss function for this: Support vector machine
 
 ## Support vector machine
 
@@ -90,7 +90,7 @@ in which $$s_i$$ is our linear function:
 s_j = f(x_i, \theta, b)_j = (\theta x + b)_j
 \end{equation}
 
-Looks intimidating, how do we use it? $$s$$ represents just the score of the function and $$y_i$$ represents the corrent index. Let's say we have input vector, which has six (6) elements. We'll calculate the score using linear function and the output vector has (4) elements, which represent our categories. Let's say the correct category is index 1 and use it to calculate the loss:
+Looks intimidating, how do we use it? $$s_j$$ represents just the score of the function and $$j$$ and $$y_i$$ represent indeces. $$y_i$$ is special case and repsents the correct index (or the correct class). Let's say we have input vector, which has six (6) elements. We'll calculate the score using linear function and the output vector has (4) elements, which represent our categories. Let's say the correct class is index 1 and use it to calculate the loss:
 
 
 ```python
@@ -117,9 +117,9 @@ print("Score: {0}".format(Li))
     Score: 3.203306333209401
 
 
-Now do note, that in the logistic regression we got only one output value for given set of inputs. Multiclass classifier produces a array, which contains a score for each class. In the example we had a input array which had 6 values and using dot product we got score array which had 4 values or classes. When we make a prediction, we select the class which has the highest score using argmax -function.
+Now do note, that in the logistic regression we got only one output value for given set of inputs. Multiclass classifier produces a array, which contains a score for each class. In the example we had a input array which had 6 values and using dot product we got score array which had 4 values or classes. The highest score represents the best guess. When we make a prediction, we select the class which has the highest score using argmax -function.
 
-Loss function represents the fitness of our fit, or the quantity of data loss. But there lies a bug in our code. Suppose we want to minimize the $$L_i$$ function, which is $$0$$. Now the problem arises if $$\theta$$ is converges to $$0$$ and that might not be our preferred fit. We'll need to add a penalty for the $$\theta$$ too, and in this case, we can regularization penalty $$R(\theta)$$ and one of the most common penalties is the L2 norm
+Loss function represents the fitness of our fit, or the quantity of data loss. But there lies a bug in our code. Suppose we want to minimize the $$L_i$$ function, which is $$0$$. Now the problem arises if $$\theta$$ is converges to $$0$$ and that might not be our preferred fit. We'll need to add a penalty for the $$\theta$$ too, and in this case, we can use regularization penalty $$R(\theta)$$. One of the most common penalties is the L2 norm:
 
 \begin{equation}
 R = \sum_i \sum_j \theta^2_{i,j}
@@ -131,7 +131,7 @@ Now if we add this to loss function, and suppose we have $$i$$ number of points 
 L = \frac{1}{N}\sum_i L_i+ \frac{\lambda}{2} R(\theta)
 \end{equation}
 
-in which $$\lambda$$ is the regularization strength. It's also common to see the $$\frac{1}{2}$$ in front of the regularization so, that the derivatives will cancel it out. We'll need the gradient of our loss function for the stochastic gradient algorithm, so here it is:
+in which $$\lambda$$ is the regularization strength and $$N$$ is the number of points. It's also common to see the $$\frac{1}{2}$$ in front of the regularization so, so that the derivative will cancels it out. We'll need the gradient of our loss function for the stochastic gradient algorithm, so here it is:
 
 \begin{equation}
 \frac{\partial L}{\partial \theta_n} \rightarrow \frac{1}{N}\frac{\partial}{\partial \theta_n}(\sum_i L_i) + \frac{\lambda}{2} \frac{\partial}{\partial \theta_n} (\sum_i \sum_j \theta^2_{i,j})
@@ -143,7 +143,7 @@ Now in order to derivate the $$L_i$$ we need to use the [chain rule](https://en.
 \frac{\partial L}{\partial \theta_n} = \frac{1}{N} \frac{\partial L_i}{\partial s_i}\frac{\partial s_i}{\partial \theta_n} + \lambda \theta
 \end{equation}
 
-Now derivating $$L_i$$ presents us two cases: one where we derivate $$s_j$$, one one where we derivate $$s_{y_i}$$
+Now derivating $$L_i$$ presents us two cases: one where we derivate $$s_j$$ and one where we derivate $$s_{y_i}$$
 
 $$
 \
@@ -155,7 +155,7 @@ $$
   \
 $$
 
-$$\mathbb{1}$$ is just a function, which just evaluates if the inside is greater then zero, function produces value 1 and else 0. The function, which we just got is quite long, so let's make an alias for that:
+$$\mathbb{1}$$ is just a function, which just evaluates if the inside is greater then zero function produces value 1 and if not, function produces 0. Now that function is quite long, so let's make an alias for that:
 
 \begin{equation}
 \nabla L_i = \frac{\partial L_i}{\partial s_i}
@@ -208,9 +208,9 @@ def svm_loss_function_and_gradient(theta, X, y, delta):
     return L, dL
 ```
 
-## Model
+## Fitting the model
 
-In the model I'm not going to use $$b$$ vector separately, as presented in the equations. Instead I'm going to just add one column to the theta matrix and ones to the initial X input matrix.
+In the model I'm not going to use $$b$$ vector separately, as presented in the equations. Instead I'm going to just add one column to the $$\theta$$ matrix and ones to the initial X input matrix.
 
 
 ```python
@@ -268,7 +268,7 @@ plt.grid()
 ![png](/images/machine_learning_support_vector_machine/kuva_2.png)
 
 
-Our function converges to the best value quite fast, and I guess only 200 iterations would have been enought. Let's plot our results!
+Our function converges to the best value quite fast, and I guess only 200 iterations would have been sufficient. Let's plot our results!
 
 
 ```python
@@ -300,4 +300,4 @@ plt.grid()
 ![png](/images/machine_learning_support_vector_machine/kuva_3.png)
 
 
-Results look quite good. I wanted to do this post first, since in the next post there's quite alot of stuff to go through. We're going to cover atleast following subjects: neural network, feed forward, back propagation and softmax classifier. Till next time!
+Results look quite good. I wanted to do this post first, since in the next post there's quite a lot of stuff to go through and trying to fit multiclass things in the post would've been quite hopeless. In the next post we're going to cover at least following subjects: neural network, feed forward, back propagation and softmax classifier. Till next time!
