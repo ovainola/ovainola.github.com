@@ -90,7 +90,7 @@ in which $$s_i$$ is our linear function:
 s_j = f(x_i, \theta, b)_j = (\theta x + b)_j
 \end{equation}
 
-Looks intimidating, how do we use it? $$s_j$$ represents just the score of the function and $$j$$ and $$y_i$$ represent indeces. $$y_i$$ is special case and repsents the correct index (or the correct class). Let's say we have input vector, which has six (6) elements. We'll calculate the score using linear function and the output vector has (4) elements, which represent our categories. Let's say the correct class is index 1 and use it to calculate the loss:
+Looks intimidating, how do we use it? $$s_j$$ represents just the score of the function and $$j$$ and $$y_i$$ represent indeces. $$y_i$$ is special case and represent the correct index (or the correct class). Let's say we have input vector, which has six (6) elements. We'll calculate the score using linear function and the output vector has (4) elements, which represent our categories. Let's say the correct class is index 1 and use it to calculate the loss:
 
 
 ```python
@@ -210,7 +210,7 @@ def svm_loss_function_and_gradient(theta, X, y, delta):
 
 ## Fitting the model
 
-In the model I'm not going to use $$b$$ vector separately, as presented in the equations. Instead I'm going to just add one column to the $$\theta$$ matrix and ones to the initial X input matrix.
+In the model I'm not going to use $$b$$ vector separately, as presented in the equations. Instead I'm going to just add one column to the $$\theta$$ matrix and an array of ones to the initial X input matrix.
 
 
 ```python
