@@ -499,7 +499,7 @@ losses = []
 
 for i in range(4000):
 
-    # evaluate class scores, [N x K]
+    # Calculate scores
     O_1 = np.maximum(0, np.dot(X, θ_1) + b_1)   # note, ReLU layer
     O_2 = np.maximum(0, np.dot(O_1, θ_2) + b_2) # note, ReLU layer
     scores = np.dot(O_2, θ_3) + b_3
