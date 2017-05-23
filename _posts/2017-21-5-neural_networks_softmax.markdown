@@ -10,11 +10,11 @@ titlepic: softmax.png
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 ## TL;DR
 
-Finally to the agenda: Neural networks. In this post we'll cover the categorization problem again using softmax classifier. All the code in this post is written in Python, version 3.6. I've gathered most of the used material from [here](http://cs231n.github.io/).
+Finally to the agenda: Neural networks. In this post we'll cover categorization problem using softmax classifier. All the code in this post is written in Python, version 3.6. I've gathered most of the used material from [here](http://cs231n.github.io/).
 
 ## Neural networks
 
-Sorry, but this is going to be quite a long post, since there's a lot of stuff we have to go through. In the previous posts we've been doing "linear analysis", or we could say that the functions which we've fitted were linear. Neural networks enables us to fit non-linear data, which can be a huge advantage in some cases (f.ex. speech & image recognition). As before, let's create some data first, so we can visualize the problem.
+Sorry, but this is going to be quite a long post, since there's a lot of stuff we have to go through. In the previous posts we've been doing "linear analysis", or we could say that the functions which we've fitted were linear. Neural networks enables us to fit our functions to non-linear data, which can be a huge advantage in some cases (f.ex. speech & image recognition). As before, let's create some data first, so that we can visualize the problem.
 
 
 ```python
@@ -63,19 +63,19 @@ plt.grid()
 ![png](/images/machine_learning_softmax/neural_networks_bck_2_0.png)
 
 
-We'll start to build our neural network from the scratch and we'll begin with "feed forward"...
+It's quite hard to fit a linear function to this data. We'll start our journey to neural network from the basics and we'll begin with "feed forward"...
 
 ## Feed forward
 
-As I studied more on neural networks, majority of the websites tended to start with brain analogy and the neurons inside the brain. For me this approach proved to be super confusing, so I'm just gonna skip that and go with the mathematical analogies (and later I try to draw some circles...). Our goal remains the same: we're again just trying to fit our function to some given data and find the optimal multipliers.
+As I've studied more on neural networks, majority of the websites tended to start with brain analogy: neurons inside the brain and how neurons are connected with each other. For me this approach proved to be super confusing, so I'm just gonna skip that and go with the mathematical analogies (and later I try to draw some circles...). Nevertheless, our goal remains the same: we're just trying to fit our function to some given data by finding the optimal multipliers.
 
-Let's first start with the feed forward or forward pass. As the name suggests, we have something, and feed it forward. In this case we have a function, which produces a results $$y$$, which we again feed to another function. This implies that we have some $$x$$ number of functions, instead of one. In the previous [Logistic regression post](http://ovainola.github.io/jekyll/update/2017/02/17/machine_learning_logistic_regression.html) we used sigmoid function, but this function is only capable of presenting binary values: $$1$$ or $$0$$. This is quite undesirable, when there are more than two categories, which is why we'll use the rectified linear unit function. In short, [ReLU]( https://en.wikipedia.org/wiki/Rectifier_(neural_networks) ):
+Let's first start with the feed forward or forward pass. As the name suggests, we have something, and feed it forward. In our case we have a function, which produces a results $$y$$, which we again feed to another function. Instead of one, we have some $$x$$ number of functions. In the [Logistic regression post](http://ovainola.github.io/jekyll/update/2017/02/17/machine_learning_logistic_regression.html) we used sigmoid function, but this function is only capable of presenting binary values: $$1$$ or $$0$$. This is quite undesirable, when there are more than two categories. There are couple of choices which we could use, but we'll go with the rectified linear unit function or in short, [ReLU]( https://en.wikipedia.org/wiki/Rectifier_(neural_networks) ):
 
 \begin{equation}
 f_{ReLU} = max(0, x)
 \end{equation}
 
-We're still going to use linear functions, which we will feed to the ReLU function:
+We're still going to use linear functions, which we will feed into the ReLU function:
 
 \begin{equation}
 f(x, \theta, b) = \theta^T x + b
@@ -87,7 +87,7 @@ In this post I'm going to use following notation:
 (x, \theta, b) \rightarrow f(x, \theta, b) \rightarrow \mathcal{O}
 \end{equation}
 
-in which $$\mathcal{O}$$ is the output of the function. In order to approach our problem, let's look at this using an example: we use two (2) functions and create a pipe where one feeds it's result to another function:
+in which $$\mathcal{O}$$ is the output of the function. We should start with an example, how to implement this. Let's create two (2) functions and create a pipe, where one feeds it's result to another function:
 
 
 ```python
@@ -128,15 +128,15 @@ plt.grid()
 ![png](/images/machine_learning_softmax/neural_networks_bck_5_0.png)
 
 
-Well, that  doesn't seem to be that useful at all. But wait! Fun part is yet to come. We can notice, how I put both $$f_1$$ and $$f_2$$ their own multipliers. We can like to visualize with some arrows:
+Well, that  doesn't seem to be that useful at all. But wait! Fun part is yet to come. If you look at the code, you can notice how I put both $$f_1$$ and $$f_2$$ their own multipliers. We can like to visualize with some arrows:
 
 \begin{equation}
 x \rightarrow f_1(x) \rightarrow f_2(\mathcal{O_1}) \rightarrow y
 \end{equation}
 
-Now to the terminology: Our pipe represent our neural network and each functions present a layer. $$f_1$$ is input layer and $$f_2$$ is the output layer. If we would have more functions betweem $$f_1$$ and $$f_2$$, they would be called just a hidden layers. There can be N-number of hidden layers, but just for naming conventions, first is input layer and last output. And don't think it too hard... I tried and got confused.
+Now to the terminology: Our pipe represent our neural network and each functions present a layer. $$f_1$$ is input layer and $$f_2$$ is the output layer. If we would have more functions between $$f_1$$ and $$f_2$$, they would be called just a hidden layers. There can be N-number of hidden layers, but just for naming conventions, first is input layer and last output. And don't think it too hard... I tried and got confused.
 
-Ok, easy peasy. Now to the fun part. What about if we increase the number of multipliers in each function? This should pose no problem, since we're using dot function, which will take care of sum and product operations (We just have to make sure all the matrices have proper shapes, because feed forward). We will be using a matrix for storing the multipliers, so we can choose the length and width for the matrix. Let's try with the case, where:
+Ok, easy peasy. Now to the fun part. What about if we increase the number of multipliers in each layer? This should pose no problem, since we're using dot function, which will take care of sum and product operations (We just have to make sure all the matrices have proper shapes, because feed forward). We will be using a matrix for storing the multipliers, so we can choose the length (read height) and width. Let's try with a case, where:
 * $$f_1$$ multiplier matrix has length 5 and width 1
 * $$f_2$$ multiplier matrix has length 1 and width 5
 
@@ -227,7 +227,7 @@ plt.grid()
 ![png](/images/machine_learning_softmax/neural_networks_bck_7_0.png)
 
 
-That's more like it. I'd say quite interesting shapes. We only applied one extra dimension to the matrix, but what if we add a second one? And since we're going crazy why not throw an extra function $$f_3$$. Do note, that the first matrix now has shape (5,2) so the input $$x$$ has to have shape (2).
+That's more like it. I'd say quite interesting shape. We only applied one extra dimension to our matrices, but what if we add a second one? And since we're going crazy why not throw an extra function $$f_3$$. Let's decide that the first matrix now has shape (5,2) so the input $$x$$ has to have shape (2).
 
 \begin{equation}
 x \rightarrow f_1(x) \rightarrow f_2(\mathcal{O_1}) \rightarrow f_3(\mathcal{O_2}) \rightarrow y
@@ -324,23 +324,23 @@ plt.grid()
 ![png](/images/machine_learning_softmax/neural_networks_bck_9_0.png)
 
 
-Whoa, such matrix joggling... let's stop and go the analogies. They're much more interesting :)
+Whoa, such matrix joggling... let's stop for a second and review some analogies. Less math is sometimes good for everybody :)
 
 <img src="/images/machine_learning_softmax/neuron_defin.png" alt="Drawing" style="width: 800px;"/>
 ![](/images/machine_learning_softmax/neuron_defin.png =250x100)
 
-As we talked before, each function represents a layer. In each function, each row in multiplier matrix represents a neuron. Usually (at least the pages where I visited) the multiplier columns aren't drawn. This leaves us with the circles, which represent the neurons. In the picture above we can see that our matrix represents five (5) neurons. With the given analogy, we can draw our last example network as:
+As we talked before, each function represents a layer. In each function, each row in multiplier matrix represents a neuron. Usually (at least the pages where I visited) the multiplier columns aren't drawn. This leaves us with the circles, which represent only the neurons. In the picture above we can see that our matrix represents five (5) neurons. With the given analogy, we can draw our last example network as:
 
 ![png](/images/machine_learning_softmax/neural_network.png)
 
 
-and thus the name: neural network. If you're still reading: **Congratulations**! I have to honest: we've only covered the first half here, but do not worry! Following stuff is almost the same as in the previous posts.
+and thus the name: neural network. Arrows just show how values are applied to the neuron (dot product and sum). If you're still reading: **Congratulations**! I have to honest: we've only covered the first half here, but do not worry! Following stuff is almost the same as in the previous posts. No dragons or nightmares.
 
 ## Softmax classifier
 
 ### Classification using propabilities
 
-In the last post support vector machine (SVM) and now we're about to use softmax classifier Definitions for the our loss function:
+In the last post we used support vector machine (SVM) for categorization problem but now we're about to use softmax classifier. Softmax is defined as:
 
 \begin{equation}
 L_i = -\log(p_{y_i}), \hspace{1cm} p_k = \frac{e^{f_k}}{\sum_j e^{f_{j}}}
@@ -360,7 +360,7 @@ L_i = -\bigg( \log\big(e^{f_{y_i}}\big) - log \big(\sum_j e^{f_{j}} \big) \bigg)
 L_i =  log \big(\sum_j e^{f_{j}} \big) -f_{y_i}
 \end{equation}
 
-SVM produced a score for each class, but softmax produces a propability for each class. Let's calculate the same example as in the last post: input vector, which has six (6) elements and in the output we have four (4) classes.
+SVM produced a score for each class, but softmax produces a probability. Just to see how this function works, let's calculate the same example as in the last post: input vector has six (6) elements and in the output we should have four (4) classes.
 
 
 ```python
@@ -375,17 +375,17 @@ Li = -np.log(probs[yi])[0]
 print("Score: {0}".format(Li))
 ```
 
-    Propabilities: [  8.50640639e-05   7.16811307e-03   3.23025170e-06   9.92743593e-01]
+    Probabilities: [  8.50640639e-05   7.16811307e-03   3.23025170e-06   9.92743593e-01]
     Score: 4.938112829809168
 
 
-Again, we apply regularization loss (the same $$L_2$$ as in the last post and since our network has multiple multipliers, let's sum these together) to our loss function which leaves us with:
+In our total loss function we apply again a regularization loss (the same $$L_2$$ as in the last post and since our network has multiple multipliers, let's sum these together), which leaves us with:
 
 \begin{equation}
 L = \frac{1}{N}\sum_i L_i + \frac{\lambda}{2} \sum_j R(\theta_j)
 \end{equation}
 
-in which $$j$$ is the number of $$\theta$$'s. We still need calculate the gradient for the stochastic descent. Luckily we can use calculus for this task.
+in which $$j$$ is the number of $$\theta$$'s or layers. We still need calculate the gradient for the stochastic gradient descent. Luckily we can use calculus for this task.
 
 \begin{equation}
 \frac{\partial L}{\partial f_k} = \frac{\partial }{\partial f_k} \Bigg( log \big(\sum_j e^{f_{j}} \big) -f_{y_i} \Bigg)
@@ -402,21 +402,28 @@ Let's use derivate rules of logarithm to derivate our function: $$\frac{d}{dx} \
 \end{equation}
 
 
-Easy peasy. I used the code from [this](http://cs231n.github.io/neural-networks-case-study/) site, since I didn't want to add my mistakes to here.
+Easy peasy. I used the code from [this](http://cs231n.github.io/neural-networks-case-study/) site, since I didn't want to add my mistakes here.
 
 
 ```python
 def softmax_classifier(scores, y):
     """
     Softmax classifier, reference: http://cs231n.github.io/neural-networks-case-study/
+
+    Parameters
+    ----------
+        scores: array, size: NxM
+            Score array for each data point
+        y: array, size: M
+            Correct indeces for each data point
     """
     n_values = len(y)
     exp_scores = np.exp(scores)
-    probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True) # [N x K]
+    probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
 
     # compute the loss: average cross-entropy loss and regularization
-    corect_logprobs = -np.log(probs[range(n_values),y])
-    data_loss = np.sum(corect_logprobs) / n_values
+    correct_logprobs = -np.log(probs[range(n_values),y])
+    data_loss = np.sum(correct_logprobs) / n_values
 
     dscores = probs
     dscores[range(n_values),y] -= 1
@@ -426,9 +433,9 @@ def softmax_classifier(scores, y):
 
 ## Back propagation
 
-In the last post we used only had one function, which we used for fitting (loss function). Updating the multipliers in the optimization loop was quite easy but think a bit our new situation: we have an input, we feed it into a network and get output. We have no idea, what kind of effect each layer had on the result. Solution to this problem is back propagation. In principle is we count backwards how much given layer had effect.
+In the last post we only had one function for fitting. Updating the multipliers in the optimization loop was quite easy but think a bit our new situation: we have an input, we feed it into a network and get an output. We have no idea, what kind of effect each layer had on the result. Solution to this problem is back propagation. In principle is we count backwards how much a given layer had an effect.
 
-This requires some serious chain rule derivation, but here's a couple of derivates for our upcoming neural network with three layers:
+This requires some serious chain rule derivation and here's a couple of derivatives for our upcoming neural network with three layers:
 
 \begin{equation}
 \frac{\partial L}{\partial \theta_3} = \frac{\partial L}{\partial  \mathcal{O_3}} \frac{\partial \mathcal{O_3}}{\partial \theta_3} + \lambda \theta_3 \rightarrow \frac{\partial L}{\partial f_k} \mathcal{O_2} + \lambda \theta_3
@@ -443,7 +450,7 @@ This requires some serious chain rule derivation, but here's a couple of derivat
 \frac{\partial L}{\partial \mathcal{O_2}} = \frac{\partial L}{\partial \mathcal{O_3}} \frac{\partial \mathcal{O_3}}{\partial \mathcal{O_2}} \rightarrow \frac{\partial L}{\partial f_k}\theta_3
 \end{equation}
 
-in which $$\mathbb{1}$$ is array with ones. The hidden layers are derivated the same, but with more derivatives:
+in which $$\mathbb{1}$$ is array of ones. The hidden layers are derivated the same, but with more derivatives:
 
 \begin{equation}
 \frac{\partial L}{\partial \theta_2} = \frac{\partial L}{\partial  \mathcal{O_3}} \frac{\partial \mathcal{O_3}}{\partial \mathcal{O_2}} \frac{\partial \mathcal{O_2}}{\partial \theta_2} + \lambda \theta_2 \rightarrow \frac{\partial L}{\partial \mathcal{O_2}} \mathcal{O_1} + \lambda \theta_2
@@ -460,11 +467,11 @@ After calculating all the derivatives we can apply the gradient update, f.ex:
 \theta_3 = \theta_3 + \Delta \frac{\partial L}{\partial \theta_3}
 \end{equation}
 
-in which $$\Delta$$ is the step size. Matrix multiplications need some juggling with the transposes. If you need more information, please check [here](http://cs231n.github.io/optimization-2/) and [here](http://cs231n.github.io/neural-networks-1/) sites for definitions and examples.
+in which $$\Delta$$ is the step size. Do note that f.ex. $$\frac{\partial L}{\partial \theta_3}$$ has to be the same shape as $$\theta_3$$ so this requires some matrix jugging the transposes. If you need more information, please check [here](http://cs231n.github.io/optimization-2/) and [here](http://cs231n.github.io/neural-networks-1/) sites for definitions and examples.
 
 ## Model
 
-Ok, let's sum things up: we need a pipe/neural network, softmax classifier and we need to back propagate the values for the gradient update. Let's give it a try. I've taken some examples from [here](http://cs231n.github.io/neural-networks-case-study/), which has been a great source for more definitions.
+Ok, let's sum things up: we need a neural network, softmax classifier and we need to back propagate the values for the gradient update. Without further due let's give it a try. I've taken some examples from [here](http://cs231n.github.io/neural-networks-case-study/), which has been a great source for more definitions.
 
 
 ```python
@@ -554,7 +561,7 @@ plt.grid()
 ![png](/images/machine_learning_softmax/neural_networks_bck_17_0.png)
 
 
-A bit spiky, but converges so looks promising, let's plot the results.
+A bit spiky, but converges quite nicely so I'd say it looks promising. Let's plot the results and see how our fit worked.
 
 
 ```python
@@ -587,4 +594,4 @@ plt.grid()
 
 ### Conclusion
 
-In this post we implemented a neural network using softmax classifier. Next things to improve our model would be to test for over fitting, improving gradient update ([ref](http://cs231n.github.io/neural-networks-3/)), modify the input data for the network ([ref](http://cs231n.github.io/neural-networks-2/)) and overall code review to improve the code quality. Now the model, which we just created is only for educational purposes, so shouldn't use this in real analysis (at least at first). I'd recommend that if you're planning create some serious models, use f.ex. [scikit-learn](http://scikit-learn.org/stable/index.html) or [tensorflow](https://www.tensorflow.org/). But I guess making the best of these tools you need to know what's happening under the hood. Hopefully you liked this post, stay tuned!
+In this post we implemented a neural network using softmax classifier. We could improve our model by checking for over fitting, improving gradient update ([ref](http://cs231n.github.io/neural-networks-3/)), modifing/preprocess the input data for the network ([ref](http://cs231n.github.io/neural-networks-2/)) and an overall code review to improve the code quality. Now the model, which we just created, is only for educational purposes, so shouldn't use this in real analysis. I'd recommend that if you're planning create some serious models, use f.ex. [scikit-learn](http://scikit-learn.org/stable/index.html) or [tensorflow](https://www.tensorflow.org/). But I guess making the best of these tools you need to know what's happening under the hood. In the next post we'll take a look a bit more concrete example and check how I used this to teach my bot to play halite. Hopefully you liked this post, stay tuned!
