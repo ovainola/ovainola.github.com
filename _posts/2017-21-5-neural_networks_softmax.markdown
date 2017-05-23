@@ -414,7 +414,7 @@ def softmax_classifier(scores, y):
     ----------
         scores: array, size: NxM
             Score array for each data point
-        y: array, size: M
+        y: array, size: N
             Correct indeces for each data point
     """
     n_values = len(y)
