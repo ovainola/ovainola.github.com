@@ -10,23 +10,19 @@ identifier: 10001
 fonts selected and layouts finished. Finally making some progress! The motivation
  to start the blog came from Jukka Aho, who also works in the
   <a href="https://github.com/JuliaFEM/JuliaFEM.jl">JuliaFEM</a> project.
-If you're into some hard core finite element analyses, go check out he's
+If you're into some hardcore finite element analyses, go check out he's
 <a href="http://ahojukka5.github.io/">blog</a>. As my first post, I'll share
 how did I managed to get the site up.</p>
 
 ## Installing requirements
 
-When I started to search for an answer: "how to start a blog", I bumped into
-[this site](https://help.github.com/articles/setting-up-your-github-pages-site-locally-with-jekyll/).
-The site contains pretty clear instructions how to start building your own blog, but in short, I needed:
+When I started to search for an answer: "how to start a blog", I bumped into [this site](https://help.github.com/articles/setting-up-your-github-pages-site-locally-with-jekyll/). The site contains pretty clear instructions on how to start building your own blog, but in short, I needed:
 
  * GitHub account
  * Ruby (version > 2.0.0)
  * Jekyll
 
- At that point, I already had a GitHub account. If you don't, go check out
-  [this page](https://help.github.com/articles/set-up-git/). For me, the first thing
-  I had to get was Ruby. And as a note, I have Linux Mint 17 as my operating system.
+ At that point, I already had a GitHub account. If you don't, go check out [this page](https://help.github.com/articles/set-up-git/). For me, the first thing I had to get was Ruby. And as a note, I have Linux Mint 17 as my operating system.
   In order to minimize my work, I first checked if Ruby was already preinstalled in my system.
 
 ```bash
@@ -39,7 +35,7 @@ Try: sudo apt-get install <selected package>
 
 So, no Ruby. From the message it's clear that the Ruby version available through
 apt-get is 1.8, and that's a no go. Off to the internet to search for the solution.
-After Scrolling through the StackOverflow, the most popular solution seemed to
+After scrolling through the StackOverflow, the most popular solution seemed to
 be to build either [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/).
 After careful decision making process, I went for the rbenv, purely because I
 visually preferred the GitHub pages more. Also rbenv had pretty good installation instructions. Off to building rbenv:
@@ -53,7 +49,7 @@ visually preferred the GitHub pages more. Also rbenv had pretty good installatio
 ```
 I'm still missing Ruby so I also installed [ruby-build](https://github.com/rbenv/ruby-build#readme)
 package. The package is used to compile different versions of Ruby.
-Since I needed version > 2.0.0, I decided to take the latest: 2.3.1:
+Since I needed version > 2.0.0, I decided to take the latest: 2.3.1.
 
 ```bash
 >> git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
