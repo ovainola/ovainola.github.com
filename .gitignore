@@ -21,6 +21,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# unfinished posts
+_posts/unfinished/*
+
 # =========================
 # Operating System Files
 # =========================
