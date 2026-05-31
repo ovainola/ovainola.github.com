@@ -9,9 +9,9 @@ identifier: 10005
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 ## TL;DR
 
-After practicing with elastic material model, we'll continue to nonlinear material modelling: viscoplasticity. In this post we'll explore Norton and Birgin viscoplastic potential equations, von Mises yield function and automatic derivation using ForwardDiff. Most of the theory can be found from [here](http://mms2.ensmp.fr/msi_paris/plasticity/transparents/Expo2.pdf) and [here](http://mms2.ensmp.fr/msi_paris/archives-transparents/JLC-Plasticity.pdf).
+After practicing with elastic material model, we'll continue to nonlinear material modelling: viscoplasticity. In this post we'll explore Norton and Bingham viscoplastic potential equations, von Mises yield function and automatic derivation using ForwardDiff. Most of the theory can be found from [here](http://mms2.ensmp.fr/msi_paris/plasticity/transparents/Expo2.pdf) and [here](http://mms2.ensmp.fr/msi_paris/archives-transparents/JLC-Plasticity.pdf).
 
-**Note! Equations are written in tensor notation, but the implementated code is in matrix notation!**
+**Note! Equations are written in tensor notation, but the implemented code is in matrix notation!**
 
 ## Recap to linear material modelling
 
@@ -106,7 +106,7 @@ Stress is always related only to the elastic part of the the strain. The theory 
 
 
 ### Decomposition of strain
-Theory presented here can be found from [here](http://eu.wiley.com/WileyCDA/WileyTitle/productCd-1118632702.html). Strain increment $$de$$ is decomposed into the elastic part de e and the plastic part de p using kinematics. Additive decomposition is used for small strains and multiplicative decomposition for large strains. In elasticplastic materials the strain increment is decomposed into an elastic and a plastic
+Theory presented here can be found from [here](http://eu.wiley.com/WileyCDA/WileyTitle/productCd-1118632702.html). Strain increment $$d\epsilon$$ is decomposed into the elastic part $$d\epsilon^e$$ and the viscoplastic part $$d\epsilon^{vp}$$ using kinematics. Additive decomposition is used for small strains and multiplicative decomposition for large strains. In elastic-plastic materials the strain increment is decomposed into an elastic and a viscoplastic
 part:
 
 
@@ -120,7 +120,7 @@ Dividing both sides with the differential time increment  $$dt$$ produces the ra
 \dot\epsilon = \dot\epsilon^e + \dot\epsilon^{vp}
 \end{equation}
 
-Diving previous equation with time increment and substituting elastic strain rate produces relation for linear region:
+Substituting the elastic strain rate into Hooke's law produces the stress-rate relation:
 
 \begin{equation}
 \dot\sigma = C : \dot\epsilon^e = C : (\dot\epsilon - \dot\epsilon^{vp})
@@ -140,7 +140,7 @@ Stress can now be expressed as:
 but usually, stress is more conveniently written as:
 
 \begin{equation}
-\sigma_{n+1} = \sigma_n + C : (\dot\epsilon - \dot\epsilon^{vp})
+\sigma_{n+1} = \sigma_n + C : (\dot\epsilon - \dot\epsilon^{vp})\,\Delta t
 \end{equation}
 
 
@@ -178,7 +178,7 @@ in which tr is a trace operator and $$\textbf{I}$$ is second order identity tens
 f(\sigma) > 0
 \end{equation}
 
-which will define, if we apply viscoplastic strain or not to our stress.
+which will define if we apply viscoplastic strain or not to our stress.
 
 
 ```julia
@@ -197,7 +197,7 @@ end
 function J_2_stress(σ)
     s = deviatoric_stress(σ)
     s_vec = vec([s; s[4]; s[5]; s[6]])  # Adding missing shear elements for double dot product
-    return 1/2 * dot(s_vec, s_vec)      # equivalent to sqrt(1/2 * s : s), in tensor notation
+    return 1/2 * dot(s_vec, s_vec)      # equivalent to 1/2 * s : s, in tensor notation
 end
 
 """ Equivalent stress
@@ -223,7 +223,7 @@ end
 
 <div>
 <img src="/images/Viscoplasticity_files/von_mises_2d.png" alt="Mountain View" style="width:400px;height:350px;" align="left">
-<video width="440" height="440" controls align="rigth">
+<video width="440" height="440" controls align="right">
   <source src="/images/Viscoplasticity_files/vonmises_yield_surface.mp4" type="video/mp4">
 </video>
 </div>
@@ -231,9 +231,9 @@ end
 
 
 
-Here are presented Von mises yield surfaces both in 2D and 3D. Used yield stress is 200 MPa. As you can see, von Mises yield surface is an oval in 2D plane. Inside the circle represents the elastic region and outside the circle the plastic region. Do note, that x- and y-axis are eigenstresses and not $$\sigma_{x}$$ and $$\sigma_{y}$$.
+Here are presented von Mises yield surfaces both in 2D and 3D. Used yield stress is 200 MPa. As you can see, the von Mises yield surface is an ellipse in the 2D principal-stress plane. Inside the ellipse represents the elastic region and outside the plastic region. Do note that the x- and y-axes are principal stresses and not $$\sigma_{x}$$ and $$\sigma_{y}$$.
 
-3D presentation reveals the whole truth and we can see that the oval shape, which we saw in 2D plane, is marely a cross-section of the cylinder, which is the von Mises yield surface. The axis of the cylinder resides at the hydrostatic pressure axis.
+The 3D presentation reveals the whole truth and we can see that the elliptical shape, which we saw in 2D plane, is merely a cross-section of the cylinder, which is the von Mises yield surface. The axis of the cylinder resides at the hydrostatic pressure axis.
 
 
 
@@ -250,7 +250,7 @@ in which $$\Phi$$ is a plastic potential, which is a function of the stress and 
 \Phi = \frac{K}{n + 1} \left(\frac{J}{K}\right)^{n+1}, \hspace{1cm} J = f(\sigma)
 \end{equation}
 
-in which $$K$$ and $$n$$ are material parameters and $$f$$ is an yield function. When we use von Mises yield function, we can derivate this function with $$\sigma$$:
+in which $$K$$ and $$n$$ are material parameters and $$f$$ is a yield function. When we use von Mises yield function, we can differentiate this function with respect to $$\sigma$$:
 
 \begin{equation}
 \frac{\partial\Phi}{\partial\sigma} = \left(\frac{J}{K}\right)^{n}\frac{3}{2}\frac{s}{\sigma_{eq}}
@@ -266,13 +266,14 @@ function norton_plastic_potential(σ, K, n, f)
     return K/(n+1) * (f_ / K) ^ (n + 1)
 end
 
-""" Analytically derivated norton rule
+""" Analytically differentiated norton rule
 """
 function analytical_dΦdσ(σ, K, n, f)
     f_ = f(σ)
     σ_v = equivalent_stress(σ)
     σ_dev_vec = deviatoric_stress(σ)
-    return (f_ / K) ^ n * 3 / 2 * σ_dev_vec / σ_v
+    voigt_factor = [1.0, 1.0, 1.0, 2.0, 2.0, 2.0]
+    return (f_ / K) ^ n * 3/2 * (σ_dev_vec .* voigt_factor) / σ_v
 end
 ```
 
@@ -285,10 +286,10 @@ end
 
 ### Summary of needed functions
 
-Here's a summarize of the main functions, which we need:
+Here's a summary of the main functions, which we need:
 
 \begin{equation}
-\sigma_{n+1} = \sigma_n + C : (\dot\epsilon - \dot\epsilon^{vp}) \hspace{1.5cm}\dot\epsilon^{vp} = \left(\frac{J}{K}\right)^{n}\frac{3}{2}\frac{s}{\sigma_{eq}}\hspace{1.5cm} J = f(\sigma) = \sigma_{eq}(\sigma) - \sigma_y
+\sigma_{n+1} = \sigma_n + C : (\dot\epsilon - \dot\epsilon^{vp})\,\Delta t \hspace{1.5cm}\dot\epsilon^{vp} = \left(\frac{J}{K}\right)^{n}\frac{3}{2}\frac{s}{\sigma_{eq}}\hspace{1.5cm} J = f(\sigma) = \sigma_{eq}(\sigma) - \sigma_y
 \end{equation}
 
 Now, we can proceed to the simulation:
@@ -312,7 +313,7 @@ Now, we can proceed to the simulation:
 n = 0.92
 K = 180.0e3
 
-# Let's make a currier function to make it pretty!
+# Let's make a curried function to make it pretty!
 f = x->von_mises_yield(x, 200.)
 
 # Ok, going through time steps
@@ -393,8 +394,8 @@ for i=2:total_num
     if yield_ > 0
         wrap = x-> norton_plastic_potential(x, K, n, f)
 
-        # This part is different. As you can see, we'll take a numerical derivate
-        # Way more convenient compared to hand derivated potential function
+        # This part is different. As you can see, we'll take an automatic derivative
+        # Way more convenient compared to hand-differentiated potential function
         dϵ_vp = ForwardDiff.gradient(wrap, σ_tria)
         σ += C * (dϵdt - dϵ_vp) * Δt
     else
@@ -412,7 +413,7 @@ grid()
 ![png](/images/Viscoplasticity_files/Viscoplasticity_12_0.png)
 
 
-Using the ForwardDiff now enables me to derivate quite complex looking function and also saves time from debugging hand derivated function. Lastly, we'll try another viscoplastic potential (Bingham model) for our plastic strain rate, which is defined as:
+Using the ForwardDiff now enables me to differentiate quite complex looking functions and also saves time from debugging hand-differentiated functions. Lastly, we'll try another viscoplastic potential (Bingham model) for our plastic strain rate, which is defined as:
 
 \begin{equation}
 \Phi = \frac{1}{2} \left(\frac{J}{\eta}\right)^2, \hspace{1cm} J=f(\sigma)
